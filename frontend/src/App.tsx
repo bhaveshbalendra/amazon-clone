@@ -95,8 +95,7 @@ function App() {
                       to="#signout"
                       onClick={signoutHandler}
                     >
-                      {" "}
-                      Sign Out{" "}
+                      Sign Out
                     </Link>
                   </NavDropdown>
                 ) : (

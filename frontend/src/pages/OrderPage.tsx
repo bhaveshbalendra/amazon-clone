@@ -3,70 +3,71 @@ import {
   PayPalButtonsComponentProps,
   SCRIPT_LOADING_STATE,
   usePayPalScriptReducer,
-} from '@paypal/react-paypal-js'
-import { useContext, useEffect } from 'react'
-import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap'
-import { Helmet } from 'react-helmet-async'
-import { Link, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import LoadingBox from '../components/LoadingBox'
-import MessageBox from '../components/MessageBox'
+} from "@paypal/react-paypal-js";
+import { useContext, useEffect } from "react";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { Helmet } from "react-helmet-async";
+import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import LoadingBox from "../components/LoadingBox";
+import MessageBox from "../components/MessageBox";
 import {
   useGetOrderDetailsQuery,
   useGetPaypalClientIdQuery,
   usePayOrderMutation,
-} from '../hooks/orderHooks'
-import { Store } from '../Store'
-import { ApiError } from '../types/ApiError'
-import { getError } from '../utils'
+} from "../hooks/orderHooks";
+import { Store } from "../Store";
+import { ApiError } from "../types/ApiError";
+import { getError } from "../utils";
 
 export default function OrderPage() {
-  const { state } = useContext(Store)
-  const { userInfo } = state
+  const { state } = useContext(Store);
+  const { userInfo } = state;
 
-  const params = useParams()
-  const { id: orderId } = params
+  const params = useParams();
+  const { id: orderId } = params;
 
   const {
     data: order,
     isLoading,
     error,
     refetch,
-  } = useGetOrderDetailsQuery(orderId!)
+  } = useGetOrderDetailsQuery(orderId!);
 
-  const { mutateAsync: payOrder, isLoading: loadingPay } = usePayOrderMutation()
+  const { mutateAsync: payOrder, isLoading: loadingPay } =
+    usePayOrderMutation();
 
   const testPayHandler = async () => {
-    await payOrder({ orderId: orderId! })
-    refetch()
-    toast.success('Order is paid')
-  }
+    await payOrder({ orderId: orderId! });
+    refetch();
+    toast.success("Order is paid");
+  };
 
-  const [{ isPending, isRejected }, paypalDispatch] = usePayPalScriptReducer()
+  const [{ isPending, isRejected }, paypalDispatch] = usePayPalScriptReducer();
 
-  const { data: paypalConfig } = useGetPaypalClientIdQuery()
+  const { data: paypalConfig } = useGetPaypalClientIdQuery();
 
   useEffect(() => {
     if (paypalConfig && paypalConfig.clientId) {
       const loadPaypalScript = async () => {
         paypalDispatch({
-          type: 'resetOptions',
+          type: "resetOptions",
           value: {
-            'client-id': paypalConfig!.clientId,
-            currency: 'USD',
+            "client-id": paypalConfig!.clientId,
+            currency: "USD",
           },
-        })
+        });
         paypalDispatch({
-          type: 'setLoadingStatus',
+          type: "setLoadingStatus",
           value: SCRIPT_LOADING_STATE.PENDING,
-        })
-      }
-      loadPaypalScript()
+        });
+      };
+      loadPaypalScript();
     }
-  }, [paypalConfig])
+  }, [paypalConfig]);
 
   const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
-    style: { layout: 'vertical' },
+    style: { layout: "vertical" },
     createOrder(data, actions) {
       return actions.order
         .create({
@@ -79,24 +80,24 @@ export default function OrderPage() {
           ],
         })
         .then((orderID: string) => {
-          return orderID
-        })
+          return orderID;
+        });
     },
     onApprove(data, actions) {
       return actions.order!.capture().then(async (details) => {
         try {
-          await payOrder({ orderId: orderId!, ...details })
-          refetch()
-          toast.success('Order is paid successfully')
+          await payOrder({ orderId: orderId!, ...details });
+          refetch();
+          toast.success("Order is paid successfully");
         } catch (err) {
-          toast.error(getError(err as ApiError))
+          toast.error(getError(err as ApiError));
         }
-      })
+      });
     },
     onError: (err) => {
-      toast.error(getError(err as ApiError))
+      toast.error(getError(err as ApiError));
     },
-  }
+  };
 
   return isLoading ? (
     <LoadingBox></LoadingBox>
@@ -159,13 +160,13 @@ export default function OrderPage() {
                           src={item.image}
                           alt={item.name}
                           className="img-fluid rounded thumbnail"
-                        ></img>{' '}
+                        ></img>{" "}
                         <Link to={`/product/${item.slug}`}>{item.name}</Link>
                       </Col>
                       <Col md={3}>
                         <span>{item.quantity}</span>
                       </Col>
-                      <Col md={3}>${item.price}</Col>
+                      <Col md={3}>Rs {item.price}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
@@ -181,19 +182,19 @@ export default function OrderPage() {
                 <ListGroup.Item>
                   <Row>
                     <Col>Items</Col>
-                    <Col>${order.itemsPrice.toFixed(2)}</Col>
+                    <Col>Rs {order.itemsPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
                     <Col>Shipping</Col>
-                    <Col>${order.shippingPrice.toFixed(2)}</Col>
+                    <Col>Rs {order.shippingPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
                     <Col>Tax</Col>
-                    <Col>${order.taxPrice.toFixed(2)}</Col>
+                    <Col>Rs {order.taxPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -202,7 +203,7 @@ export default function OrderPage() {
                       <strong> Order Total</strong>
                     </Col>
                     <Col>
-                      <strong>${order.totalPrice.toFixed(2)}</strong>
+                      <strong>Rs {order.totalPrice.toFixed(2)}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -231,5 +232,5 @@ export default function OrderPage() {
         </Col>
       </Row>
     </div>
-  )
+  );
 }

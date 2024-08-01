@@ -1,14 +1,14 @@
-import { useContext } from 'react'
-import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap'
-import { Helmet } from 'react-helmet-async'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import MessageBox from '../components/MessageBox'
-import { Store } from '../Store'
-import { CartItem } from '../types/Cart'
+import { useContext } from "react";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { Helmet } from "react-helmet-async";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import MessageBox from "../components/MessageBox";
+import { Store } from "../Store";
+import { CartItem } from "../types/Cart";
 
 export default function CartPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const {
     state: {
@@ -16,24 +16,24 @@ export default function CartPage() {
       cart: { cartItems },
     },
     dispatch,
-  } = useContext(Store)
+  } = useContext(Store);
 
   const updateCartHandler = (item: CartItem, quantity: number) => {
     if (item.countInStock < quantity) {
-      toast.warn('Sorry. Product is out of stock')
-      return
+      toast.warn("Sorry. Product is out of stock");
+      return;
     }
     dispatch({
-      type: 'CART_ADD_ITEM',
+      type: "CART_ADD_ITEM",
       payload: { ...item, quantity },
-    })
-  }
+    });
+  };
   const checkoutHandler = () => {
-    navigate('/signin?redirect=/shipping')
-  }
+    navigate("/signin?redirect=/shipping");
+  };
   const removeItemHandler = (item: CartItem) => {
-    dispatch({ type: 'CART_REMOVE_ITEM', payload: item })
-  }
+    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+  };
 
   return (
     <div>
@@ -57,7 +57,7 @@ export default function CartPage() {
                         src={item.image}
                         alt={item.name}
                         className="img-fluid rounded thumbnail"
-                      ></img>{' '}
+                      ></img>{" "}
                       <Link to={`/product/${item.slug}`}>{item.name}</Link>
                     </Col>
                     <Col md={3}>
@@ -69,7 +69,7 @@ export default function CartPage() {
                         disabled={item.quantity === 1}
                       >
                         <i className="fas fa-minus-circle"></i>
-                      </Button>{' '}
+                      </Button>{" "}
                       <span>{item.quantity}</span>
                       <Button
                         variant={mode}
@@ -81,7 +81,7 @@ export default function CartPage() {
                         <i className="fas fa-plus-circle"></i>
                       </Button>
                     </Col>
-                    <Col md={3}>${item.price}</Col>
+                    <Col md={3}>Rs {item.price}</Col>
                     <Col md={2}>
                       <Button
                         onClick={() => removeItemHandler(item)}
@@ -102,8 +102,8 @@ export default function CartPage() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>
-                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
-                    items) : $
+                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
+                    items) : Rs{" "}
                     {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
                   </h3>
                 </ListGroup.Item>
@@ -125,5 +125,5 @@ export default function CartPage() {
         </Col>
       </Row>
     </div>
-  )
+  );
 }
