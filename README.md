@@ -1,18 +1,10 @@
-# TypeSript MERN AMAZONA
+Welcome to my TypeScript fully-functional e-commerce website exactly like amazon build using MERN stack (MongoDB, ExpressJS, React and Node.JS).
 
-Welcome to my TypeScript course to build a fully-functional e-commerce website exactly like amazon. Open your code editor and follow me for the next hours to build an e-commerce website using MERN stack (MongoDB, ExpressJS, React and Node.JS).
+## Website
 
-![amazona](/frontend/public/images/amazona.png)
+- 👉 Render : [live](https://amazon-clone-rwkf.onrender.com/)
 
-## Get Course:
-
-[https://youtu.be/-ifcPnXHn8Q](https://youtu.be/-ifcPnXHn8Q)
-
-## Demo Website
-
-- 👉 Render : [https://ts-amazona-final.onrender.com](https://ts-amazona-final.onrender.com)
-
-## You Will Learn
+## Tech
 
 - Creating react application by Vite in TypeScript
 - Defining and exporting Types like product, orders and user in frontend
@@ -33,8 +25,8 @@ Welcome to my TypeScript course to build a fully-functional e-commerce website e
 ### 1. Clone repo
 
 ```
-$ git clone git@github.com:basir/ts-mern-amazona.git
-$ cd ts-mern-amazona
+$ git clone link
+$ cd amazon-clone
 ```
 
 ### 2. Create .env File
@@ -42,13 +34,6 @@ $ cd ts-mern-amazona
 - duplicate .env.example in backend folder and rename it to .env
 
 ### 3. Setup MongoDB
-
-- Local MongoDB
-  - Install it from [here](https://www.mongodb.com/try/download/community)
-  - In .env file update MONGODB_URI=mongodb://localhost/amazona
-- OR Atlas Cloud MongoDB
-  - Create database at [https://cloud.mongodb.com](https://cloud.mongodb.com)
-  - In .env file update MONGODB_URI=mongodb+srv://your-db-connection
 
 ### 4. Run Backend
 
@@ -70,17 +55,8 @@ $ npm start
 ### 6. Seed Users and Products
 
 - Run this on browser: http://localhost:5000/api/seed
-- It returns admin email and password and 6 sample products
 
 ### 7. Admin Login
 
 - Run http://localhost:3000/signin
 - Enter admin email and password and click signin
-
-## Support
-
-- Contact Instructor: [Basir](mailto:basir.jafarzadeh@gmail.com)
-
-## Lessons
-
-- [View All Lessons Scripts](/lessons/)
